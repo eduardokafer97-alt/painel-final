@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel diário - Eduardo</title>
+<style>
+:root{--verde:#3FA110;--verde-esc:#2A6F0B;--lima:#C5D82E;--claro:#EEF6E6;--fundo:#F6F8F3;--tinta:#1E2A18;--cinza:#64705C;--card:#fff;--borda:#DCE5D2;--neg:#C0392B}
+@media(prefers-color-scheme:dark){:root{--claro:#1F2D18;--fundo:#121A0F;--tinta:#E8F0E1;--cinza:#9AAA90;--card:#1A2415;--borda:#2C3B25;--verde:#52B81F}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--tinta);font:16px/1.5 "Segoe UI",system-ui,sans-serif}
+header{background:linear-gradient(120deg,var(--verde-esc),var(--verde));color:#fff;padding:18px 20px}
+.top{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo b{font-size:26px;letter-spacing:-1px;font-weight:700}
+.data{text-align:right;font-size:14px;opacity:.95}
+main{max-width:1100px;margin:auto;padding:20px;display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:20px}
+@media(max-width:800px){main{grid-template-columns:1fr}}
+section{background:var(--card);border:1px solid var(--borda);border-radius:14px;overflow:hidden}
+h2{margin:0;padding:12px 16px;font-size:17px;background:var(--claro);border-bottom:3px solid var(--lima);color:var(--verde-esc)}
+@media(prefers-color-scheme:dark){h2{color:var(--lima)}}
+.pad{padding:16px}
+.barra{height:10px;background:var(--claro);border-radius:6px;overflow:hidden;margin:6px 0 14px}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--verde),var(--lima));transition:width .3s}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--borda)}
+li input{width:20px;height:20px;accent-color:var(--verde)}
+li label{flex:1;cursor:pointer}
+li.ok label{text-decoration:line-through;color:var(--cinza)}
+.x{background:none;border:0;color:var(--cinza);font-size:20px;cursor:pointer}
+form.add{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}form.add button{flex:none}
+form.add input{flex:1 1 140px;min-width:0;padding:9px 10px;border:1px solid var(--borda);border-radius:8px;background:var(--card);color:var(--tinta);font:inherit}
+button.b{background:var(--verde);color:#fff;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--lima);outline-offset:2px}
+.sub{font-size:13px;color:var(--cinza)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;padding:16px}
+textarea{width:100%;padding:10px;border:1px solid var(--borda);border-radius:8px;background:var(--card);color:var(--tinta);font:inherit;resize:vertical}#antes details{border-top:1px solid var(--borda);padding:6px 0;font-size:14px}#antes summary{cursor:pointer;color:var(--verde-esc);font-weight:600}#antes pre{white-space:pre-wrap;font:inherit;margin:6px 0;color:var(--cinza)}.destaque{position:sticky;top:0;z-index:5;background:var(--fundo);border-bottom:1px solid var(--borda);padding:10px 20px}
+.destaque>div{max-width:1100px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.dest{border-left:6px solid var(--verde);background:var(--card);border-radius:8px;padding:6px 10px}
+.dest span{font-size:12px;color:var(--cinza)}.dest strong{display:block;font-size:18px;line-height:1.2}.dest em{font-style:normal;font-size:12px;font-weight:600}
+@media(max-width:600px){.destaque{position:static}}
+details>summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:17px;font-weight:700;background:var(--claro);border-bottom:3px solid var(--lima);color:var(--verde-esc)}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:'▾';float:right}details:not([open])>summary::after{content:'▸'}
+@media(prefers-color-scheme:dark){details>summary{color:var(--lima)}}
+form.add select,#ah{padding:9px 8px;border:1px solid var(--borda);border-radius:8px;background:var(--card);color:var(--tinta);font:inherit}
+#ah{flex:none;width:112px}
+li.p-a{border-left:4px solid var(--neg);padding-left:8px}li.p-m{border-left:4px solid #E0A800;padding-left:8px}li.p-b{border-left:4px solid var(--verde);padding-left:8px}
+.tag{font-size:12px;padding:2px 8px;border-radius:10px;background:var(--claro);color:var(--cinza)}
+#agenda li b{min-width:48px}
+.col{min-width:0;display:flex;flex-direction:column;gap:20px}#faixas{display:flex;flex-direction:column;gap:20px}.ind{border:1px solid var(--borda);border-left:6px solid var(--verde);border-radius:10px;padding:12px;background:var(--claro)}
+.ind.link{border-left-color:var(--lima);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+.ind span{font-size:13px;color:var(--cinza)}
+.ind strong{display:block;font-size:24px;line-height:1.2}
+.ind em{font-style:normal;font-size:13px;font-weight:600}
+.up{color:var(--verde-esc)}.down{color:var(--neg)}
+@media(prefers-color-scheme:dark){.up{color:var(--lima)}}
+.ind a{color:var(--verde-esc);font-weight:600;font-size:14px}
+@media(prefers-color-scheme:dark){.ind a{color:var(--lima)}}
+footer{max-width:1100px;margin:0 auto;padding:0 20px 24px;font-size:13px;color:var(--cinza)}
+button.r{background:none;border:1px solid var(--borda);color:var(--tinta);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+<header><div class="top">
+  <div class="logo">
+    <svg width="46" height="46" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="#fff"/><path d="M13 11v21M22 8v24M31 13v19" stroke="#2A6F0B" stroke-width="2" stroke-linecap="round"/><rect x="10" y="15" width="6" height="10" rx="1.2" fill="#3FA110"/><rect x="19" y="12" width="6" height="13" rx="1.2" fill="#C5D82E"/><rect x="28" y="18" width="6" height="8" rx="1.2" fill="#3FA110"/><path d="M8 34l9-7 6 3 13-11" stroke="#2A6F0B" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <b>Painel diário - Eduardo</b>
+  </div>
+  <div class="data"><div id="hoje"></div><div id="sequencia"></div></div>
+</div></header>
+<div class="destaque"><div id="dest"></div></div>
+
+<main>
+  <div class="col">
+  <section>
+    <h2>Agenda de hoje</h2>
+    <div class="pad">
+      <ul id="agenda"></ul>
+      <form class="add" id="fag"><input type="time" id="ah" aria-label="Hora"><input id="at" placeholder="Compromisso" required aria-label="Compromisso"><button class="b">Adicionar</button></form>
+      <p class="sub">Eventos do mercado: <a href="https://br.investing.com/economic-calendar/" target="_blank" rel="noopener">calendário econômico</a>.</p>
+    </div>
+  </section>
+  <section>
+    <h2>Tarefas de hoje</h2>
+    <div class="pad">
+      <ul id="tarefas"></ul>
+      <form class="add" id="ftr"><input id="tt" placeholder="Nova tarefa do dia" required aria-label="Nova tarefa"><select id="tp" aria-label="Prioridade"><option value="a">Alta</option><option value="m" selected>Média</option><option value="b">Baixa</option></select><button class="b">Adicionar</button></form>
+      <p class="sub">Valem só para hoje e não aparecem amanhã.</p>
+    </div>
+  </section>
+  <section>
+    <h2>Rotina diária</h2>
+    <div class="pad">
+      <div class="sub" id="prog">0 de 0 concluídos</div>
+      <div class="barra"><i id="barra"></i></div>
+      <ul id="lista"></ul>
+      <form class="add" id="form">
+        <input id="novo" placeholder="Novo objetivo diário" aria-label="Novo objetivo diário" required>
+        <button class="b">Adicionar</button>
+      </form>
+      <p class="sub">Os objetivos se repetem todo dia. As marcações zeram à meia-noite.</p>
+    </div>
+  </section>
+  <section>
+    <h2>Anotações do dia</h2>
+    <div class="pad">
+      <textarea id="nota" rows="7" placeholder="Pontos interessantes de hoje: notícias, falas, ideias, clientes…" aria-label="Anotações do dia"></textarea>
+      <div class="sub" id="nsalvo">Salvo automaticamente neste navegador.</div>
+      <div id="antes"></div>
+    </div>
+  </section></div>
+
+  <div class="col">
+    <div id="faixas"></div>
+    <section>
+      <h2>Carta mensal Sicredi</h2>
+      <div class="grid" id="cartas"></div>
+          </section>
+    <div><span class="sub" id="atual">Carregando…</span> <button class="r" id="recarregar">Atualizar agora</button></div>
+  </div>
+</main>
+<footer>Fontes: Taxa DI da B3 (divulgada pelo Banco Central, SGS), AwesomeAPI e brapi.dev. Cartões com link abrem o site indicado. Dados informativos, sem recomendação de investimento.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const hojeISO=()=>new Date().toLocaleDateString('sv-SE');
+const KEY='painel-sicredi';
+let st;
+try{st=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+st=st||{metas:['Revisar indicadores do dia','Responder carteira de clientes','Estudar 30 min'],feito:{}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+
+$('#hoje').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+function render(){
+  const d=hojeISO(), f=st.feito[d]=st.feito[d]||[];
+  $('#lista').innerHTML='';
+  st.metas.forEach((m,i)=>{
+    const li=document.createElement('li'); const ok=f.includes(m); if(ok)li.className='ok';
+    li.innerHTML=`<input type="checkbox" id="m${i}" ${ok?'checked':''}><label for="m${i}"></label><button class="x" aria-label="Remover objetivo">×</button>`;
+    li.querySelector('label').textContent=m;
+    li.querySelector('input').onchange=e=>{
+      st.feito[d]=e.target.checked?[...f,m]:f.filter(x=>x!==m); save(); render();
+    };
+    li.querySelector('.x').onclick=()=>{st.metas.splice(i,1);save();render()};
+    $('#lista').append(li);
+  });
+  const n=st.metas.filter(m=>f.includes(m)).length, t=st.metas.length;
+  $('#prog').textContent=`${n} de ${t} concluídos`;
+  $('#barra').style.width=(t?n/t*100:0)+'%';
+  // sequência de dias com todos os objetivos concluídos
+  let seq=0, dt=new Date();
+  if(!(t&&n===t)) dt.setDate(dt.getDate()-1);
+  while(true){
+    const k=dt.toLocaleDateString('sv-SE'), fe=st.feito[k]||[];
+    if(t&&st.metas.every(m=>fe.includes(m))){seq++;dt.setDate(dt.getDate()-1)}else break;
+  }
+  $('#sequencia').textContent=seq?`Sequência: ${seq} dia${seq>1?'s':''} completo${seq>1?'s':''}`:'';
+}
+$('#form').onsubmit=e=>{e.preventDefault();const v=$('#novo').value.trim();if(v&&!st.metas.includes(v)){st.metas.push(v);save();render()}$('#novo').value=''};
+
+// ---- Indicadores ----
+const nf=(v,c=2)=>v.toLocaleString('pt-BR',{minimumFractionDigits:c,maximumFractionDigits:c});
+const seta=(d,txt)=>(d>0?'▲ ':d<0?'▼ ':'')+txt;
+const cls=d=>d>0?'up':d<0?'down':'';
+function card(nome,valor,delta,c){return `<div class="ind" data-n="${nome}"><span>${nome}</span><strong>${valor}</strong><em class="${c||''}">${delta||'&nbsp;'}</em></div>`}
+function lk(nome,url,txt,aviso){return `<div class="ind link"><span>${nome}</span>${aviso?`<em>${aviso}</em>`:''}<a href="${url}" target="_blank" rel="noopener">${txt}</a></div>`}
+const get=async u=>{const r=await fetch(u);if(!r.ok)throw r.status;return r};
+
+const sgs=(nome,cod,fmt,pp)=>async()=>{
+  try{const j=await(await get(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${cod}/dados/ultimos/2?formato=json`)).json();
+    const a=+j[1].valor,d=a-j[0].valor;
+    return card(nome,fmt(a),(d===0?'sem variação':seta(d,nf(Math.abs(d))+' p.p.'))+' · '+j[1].data,cls(d));
+  }catch(e){return card(nome,'—','Indisponível agora')}};
+
+const cdiAcum=async()=>{
+  try{const h=new Date(),i=new Date(h);i.setFullYear(h.getFullYear()-1);i.setDate(i.getDate()+1);
+    const br=d=>d.toLocaleDateString('pt-BR');
+    const j=await(await get(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=${br(i)}&dataFinal=${br(h)}`)).json();
+    // Fator diário da Taxa DI (B3): taxa ao dia já derivada da Taxa DI over a.a. (252 d.u.)
+    const ac=l=>(l.reduce((p,x)=>p*(1+x.valor/100),1)-1)*100;
+    const ult=j[j.length-1].data, mes=j.filter(x=>x.data.slice(3)===ult.slice(3));
+    return card('DI acumulado no mês',nf(ac(mes))+'%',mes.length+' dias úteis · até '+ult)+card('DI acumulado 12 meses',nf(ac(j))+'%','Taxa DI (B3) · até '+ult);
+  }catch(e){return card('DI acumulado','—','Indisponível agora')}};
+
+const dolar=async()=>{
+  try{const j=await(await get('https://economia.awesomeapi.com.br/json/last/USD-BRL,USD-BRLT')).json();
+    const f=(n,k)=>{const q=j[k],p=+q.pctChange;return card(n,'R$ '+nf(+q.bid,4),seta(p,nf(Math.abs(p))+'% no dia'),cls(p))};
+    return f('Dólar comercial','USDBRL')+f('Dólar turismo','USDBRLT');
+  }catch(e){return lk('Dólar comercial e turismo','https://www.infomoney.com.br/cotacoes/','Ver no InfoMoney','Indisponível agora')}};
+
+const ibov=async()=>{
+  let tk='';try{tk=localStorage.getItem('brapi-token')||''}catch(e){}
+  const cfg=`<a href="#" onclick="definirToken();return false">${tk?'Trocar token':'Informar token'}</a> · <a href="https://www.infomoney.com.br/cotacoes/" target="_blank" rel="noopener">InfoMoney</a>`;
+  const aviso=m=>`<div class="ind link"><span>Ibovespa</span><em>${m}</em><div>${cfg}</div></div>`;
+  if(!tk)return aviso('Requer token gratuito da brapi');
+  try{const r=await fetch('https://brapi.dev/api/quote/%5EBVSP?token='+encodeURIComponent(tk));
+    if(!r.ok)return aviso(r.status===401||r.status===403?'Token inválido':'Indisponível agora');
+    const q=(await r.json()).results[0],p=q.regularMarketChangePercent;
+    return card('Ibovespa',nf(q.regularMarketPrice,0)+' pts',seta(p,nf(Math.abs(p))+'% no dia'),cls(p));
+  }catch(e){return aviso('Indisponível agora')}};
+
+const IM='https://www.infomoney.com.br/cotacoes/';
+const FAIXAS=[
+ {t:'Renda fixa',i:[sgs('Selic meta',432,v=>nf(v)+'% a.a.'),sgs('CDI (anualizado)',4389,v=>nf(v)+'% a.a.'),cdiAcum,sgs('IPCA 12 meses',13522,v=>nf(v)+'%'),
+   ()=>lk('DI futuro','https://www.infomoney.com.br/cotacoes/','Ver no InfoMoney')]},
+ {t:'Renda variável e câmbio',i:[ibov,dolar]},
+ {t:'Títulos públicos',i:[()=>lk('Tesouro Direto: taxas e preços','https://www.tesourodireto.com.br/titulos/precos-e-taxas.htm','Abrir Tesouro Direto'),
+   ()=>lk('Tesouro Transparente','https://www.tesourotransparente.gov.br/','Abrir site')]}
+];
+$('#faixas').innerHTML=FAIXAS.map((f,n)=>`<section><details open><summary>${f.t}</summary><div class="grid" id="f${n}"></div></details></section>`).join('');
+
+$('#cartas').innerHTML=lk('Sicredi Asset','https://www.sicredi.com.br/site/asset/conteudos/','Abrir carta mensal');
+
+async function carregar(){
+  $('#atual').textContent='Atualizando…';
+  await Promise.all(FAIXAS.map(async(f,n)=>{
+    const r=await Promise.all(f.i.map(fn=>fn()));
+    $('#f'+n).innerHTML=r.join('');
+  }));
+  destaque();
+  $('#atual').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function definirToken(){
+  const t=prompt('Cole seu token gratuito da brapi.dev (brapi.dev/dashboard):');
+  if(t===null)return;
+  try{localStorage.setItem('brapi-token',t.trim())}catch(e){}
+  carregar();
+}
+$('#recarregar').onclick=carregar;
+function destaque(){
+  const L=[['Selic meta','Selic meta'],['CDI (anualizado)','DI (CDI anualizado)'],['Dólar comercial','Dólar comercial'],['Ibovespa','Ibovespa']];
+  $('#dest').innerHTML=L.map(([n,r])=>{
+    const c=document.querySelector(`[data-n="${n}"]`);
+    return c?`<div class="dest"><span>${r}</span><strong>${c.querySelector('strong').textContent}</strong><em class="${c.querySelector('em').className}">${c.querySelector('em').textContent}</em></div>`
+            :`<div class="dest"><span>${r}</span><strong>—</strong><em>&nbsp;</em></div>`}).join('');
+}
+function listas(){
+  const d=hojeISO();st.agenda=st.agenda||{};st.tarefas=st.tarefas||{};
+  const ag=st.agenda[d]=st.agenda[d]||[],tr=st.tarefas[d]=st.tarefas[d]||[];
+  const ua=$('#agenda');ua.innerHTML='';
+  [...ag].sort((a,b)=>(a.h||'99').localeCompare(b.h||'99')).forEach(x=>{
+    const li=document.createElement('li');li.innerHTML='<b></b><label></label><button class="x" aria-label="Remover">×</button>';
+    li.querySelector('b').textContent=x.h||'—';li.querySelector('label').textContent=x.t;
+    li.querySelector('.x').onclick=()=>{ag.splice(ag.indexOf(x),1);save();listas()};ua.append(li)});
+  const ut=$('#tarefas');ut.innerHTML='';const ord={a:0,m:1,b:2};
+  [...tr].sort((a,b)=>a.ok-b.ok||ord[a.p]-ord[b.p]).forEach(x=>{
+    const li=document.createElement('li');li.className='p-'+x.p+(x.ok?' ok':'');
+    li.innerHTML='<input type="checkbox"><label></label><span class="tag"></span><button class="x" aria-label="Remover">×</button>';
+    const c=li.querySelector('input');c.checked=!!x.ok;c.onchange=()=>{x.ok=c.checked;save();listas()};
+    const lb=li.querySelector('label');lb.textContent=x.t;lb.onclick=()=>c.click();
+    li.querySelector('.tag').textContent={a:'Alta',m:'Média',b:'Baixa'}[x.p];
+    li.querySelector('.x').onclick=()=>{tr.splice(tr.indexOf(x),1);save();listas()};ut.append(li)});
+}
+$('#fag').onsubmit=e=>{e.preventDefault();const d=hojeISO();(st.agenda[d]=st.agenda[d]||[]).push({h:$('#ah').value,t:$('#at').value.trim()});$('#at').value='';$('#ah').value='';save();listas()};
+$('#ftr').onsubmit=e=>{e.preventDefault();const d=hojeISO();(st.tarefas[d]=st.tarefas[d]||[]).push({t:$('#tt').value.trim(),p:$('#tp').value,ok:false});$('#tt').value='';save();listas()};
+function notas(){
+  st.notas=st.notas||{};const d=hojeISO(),t=$('#nota');t.value=st.notas[d]||'';
+  t.oninput=()=>{st.notas[d]=t.value;save();$('#nsalvo').textContent='Salvo às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
+  const ant=Object.keys(st.notas).filter(k=>k!==d&&st.notas[k].trim()).sort().reverse().slice(0,7);
+  $('#antes').innerHTML=ant.map(k=>`<details><summary>${k.split('-').reverse().join('/')}</summary><pre></pre></details>`).join('');
+  document.querySelectorAll('#antes pre').forEach((e,n)=>e.textContent=st.notas[ant[n]]);
+}
+render();listas();notas();carregar();
+setInterval(carregar,15*60*1000);
+</script>
+</body>
+</html>
